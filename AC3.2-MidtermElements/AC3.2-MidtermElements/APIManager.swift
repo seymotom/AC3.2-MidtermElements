@@ -19,12 +19,13 @@ class APIRequestManager {
         let session = URLSession(configuration: URLSessionConfiguration.default)
         session.dataTask(with: myURL) { (data: Data?, response: URLResponse?, error: Error?) in
             if error != nil {
-                print("Error durring session: \(error)")
+                print("Error durring session: \(String(describing: error))")
             }
             guard let validData = data else { return }
             callback(validData)
             }.resume()
     }
+    
     
     func postRequest(endPoint: String, data: [String:Any], completionHandler: @escaping (HTTPURLResponse?) -> Void) {
         guard let url = URL(string: endPoint) else { return }
@@ -46,7 +47,7 @@ class APIRequestManager {
         let session = URLSession(configuration: .default)
         session.dataTask(with: request) { (data, response, error) in
             if error != nil {
-                print("Error encountered during post request: \(error)")
+                print("Error encountered during post request: \(String(describing: error))")
             }
             if response != nil {
                 let httpResponse = (response! as! HTTPURLResponse)
@@ -64,4 +65,5 @@ class APIRequestManager {
             }
             }.resume()
     }
+    
 }

@@ -71,6 +71,4 @@ class Element {
         }
         return nil
     }
-    
-    
 }

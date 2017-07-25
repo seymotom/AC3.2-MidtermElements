@@ -44,19 +44,23 @@ class ElementsTableViewController: UITableViewController {
         return elements.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: elementsCellIdentifier, for: indexPath)
         let thisElement = elements[indexPath.row]
         cell.textLabel?.text = "\(thisElement.number).  \(thisElement.name)"
         cell.detailTextLabel?.text = "\(thisElement.symbol) (\(thisElement.number)) \(thisElement.weight)"
         cell.imageView?.image = #imageLiteral(resourceName: "loading")
-        
         APIRequestManager.manager.getData(endPoint: thisElement.thumbnailUrlString) { (data) in
             if let imageData = data {
-                DispatchQueue.main.async {
-                    cell.imageView?.image = UIImage(data: imageData)
-                    cell.setNeedsLayout()
+                if let cell = tableView.cellForRow(at: indexPath) {
+                    DispatchQueue.main.async {
+                        cell.imageView?.image = UIImage(data: imageData)
+                        cell.imageView?.alpha = 0
+                        UIView.animate(withDuration: 0.2, animations: {
+                            cell.imageView?.alpha = 1.0
+                            cell.setNeedsLayout()
+                        })
+                    }
                 }
             }
         }
